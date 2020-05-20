@@ -18,7 +18,7 @@ series:
       - Parallel camera interface
       - Analog true random number generator
       - 96-bit unique ID
-  series_name: RealThread_STM32F2xx
+  series_name: STM32F2
   peripheral: {}
   sub_series:
   - sub_series_name: STM32F205
