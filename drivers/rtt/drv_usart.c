@@ -6,7 +6,9 @@
  * Change Logs:
  * Date           Author       Notes
  * 2018-10-30     SummerGift   first version
+ * 2020-05-23     chenyaxing   modify stm32_uart_config
  */
+
 #include "string.h"
 #include "stdlib.h"
 #include "drv_common.h"
