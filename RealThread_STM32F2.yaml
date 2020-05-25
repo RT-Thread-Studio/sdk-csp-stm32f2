@@ -2,7 +2,7 @@
 vendor: RealThread
 dvendor: STMicroelectronics
 name: STM32F2
-version: 0.1.6
+version: 0.1.7
 yaml_version: 1
 type: Chip_Support_Packages
 family_name: STM32
@@ -451,7 +451,7 @@ series:
         - STM32F205xx
         files:
         - libraries\CMSIS\Device\ST\STM32F2xx\Source\Templates\gcc\startup_stm32f205xx.S
-        - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f2xx.h
+        - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f205xx.h
         - libraries\CMSIS\Lib\GCC
       armcc:
         entry_point: none
@@ -875,7 +875,7 @@ series:
         - STM32F207xx
         files:
         - libraries\CMSIS\Device\ST\STM32F2xx\Source\Templates\gcc\startup_stm32f207xx.S
-        - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f2xx.h
+        - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f207xx.h
         - libraries\CMSIS\Lib\GCC
       armcc:
         entry_point: none
@@ -1131,7 +1131,7 @@ series:
         - STM32F215xx
         files:
         - libraries\CMSIS\Device\ST\STM32F2xx\Source\Templates\gcc\startup_stm32f215xx.S
-        - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f2xx.h
+        - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f215xx.h
         - libraries\CMSIS\Lib\GCC
       armcc:
         entry_point: none
@@ -1387,7 +1387,7 @@ series:
         - STM32F217xx
         files:
         - libraries\CMSIS\Device\ST\STM32F2xx\Source\Templates\gcc\startup_stm32f217xx.S
-        - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f2xx.h
+        - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f217xx.h
         - libraries\CMSIS\Lib\GCC
       armcc:
         entry_point: none
@@ -1446,7 +1446,8 @@ series:
     - libraries\STM32F2xx_HAL_Driver
     - libraries\CMSIS\Include
     - libraries\CMSIS\RTOS
-    - libraries\CMSIS\Device\ST\STM32F2xx\Include
+    - libraries\CMSIS\Device\ST\STM32F2xx\Include\stm32f2xx.h
+    - libraries\CMSIS\Device\ST\STM32F2xx\Include\system_stm32f2xx.h
     - libraries\CMSIS\Device\ST\STM32F2xx\Source\Templates\system_stm32f2xx.c
   cpu_info:
     core: Cortex-M3
