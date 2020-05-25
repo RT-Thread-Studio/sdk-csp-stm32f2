@@ -331,7 +331,8 @@ static rt_err_t stm32_gpio_clk_enable(GPIO_TypeDef *gpiox)
 
     return RT_EOK;
 }
-char * up_char(char * c)
+
+static int up_char(char * c)
 {
     if ((*c >= 'a') && (*c <= 'z'))
     {
@@ -339,6 +340,7 @@ char * up_char(char * c)
     }
     return 0;
 }
+
 static void get_pin_by_name(const char* pin_name, GPIO_TypeDef **port, uint16_t *pin)
 {
     int pin_num = atoi((char*) &pin_name[2]);
@@ -349,6 +351,7 @@ static void get_pin_by_name(const char* pin_name, GPIO_TypeDef **port, uint16_t 
             + (uint32_t) (port_name - 'A') * ((uint32_t) GPIOB - (uint32_t) GPIOA)));
     *pin = (GPIO_PIN_0 << pin_num);
 }
+
 static rt_err_t stm32_gpio_configure(struct stm32_uart_config *config)
 {
     int uart_num = 0;
