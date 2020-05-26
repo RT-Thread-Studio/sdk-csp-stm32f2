@@ -71,11 +71,11 @@ void system_clock_config(int target_freq_mhz)
 
 int clock_information(void)
 {
-    printf("System Clock information\n");
-    printf("SYSCLK_Frequency = %d\n", (int) HAL_RCC_GetSysClockFreq());
-    printf("HCLK_Frequency   = %d\n", (int) HAL_RCC_GetHCLKFreq());
-    printf("PCLK1_Frequency  = %d\n", (int) HAL_RCC_GetPCLK1Freq());
-    printf("PCLK2_Frequency  = %d\n", (int) HAL_RCC_GetPCLK2Freq());
+    printf("System Clock information\r\n");
+    printf("SYSCLK_Frequency = %d\r\n", (int) HAL_RCC_GetSysClockFreq());
+    printf("HCLK_Frequency   = %d\r\n", (int) HAL_RCC_GetHCLKFreq());
+    printf("PCLK1_Frequency  = %d\r\n", (int) HAL_RCC_GetPCLK1Freq());
+    printf("PCLK2_Frequency  = %d\r\n", (int) HAL_RCC_GetPCLK2Freq());
 
     return 0;
 }
