@@ -4,33 +4,16 @@
   * @author  MCD Application Team
   * @brief   This file contains HAL common defines, enumeration, macros and 
   *          structures definitions. 
-  *                                                             modified by ARM 
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -46,7 +29,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx.h"
 #include "Legacy/stm32_hal_legacy.h"
-#include <stdio.h>
+#include <stddef.h>
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -71,22 +54,19 @@ typedef enum
 } HAL_LockTypeDef;
 
 /* Exported macro ------------------------------------------------------------*/
-#ifndef NULL
-  #define NULL      (void *) 0
-#endif
+
+#define UNUSED(X) (void)X      /* To avoid gcc/g++ warnings */
 
 #define HAL_MAX_DELAY      0xFFFFFFFFU
 
-#define HAL_IS_BIT_SET(REG, BIT)         (((REG) & (BIT)) != RESET)
-#define HAL_IS_BIT_CLR(REG, BIT)         (((REG) & (BIT)) == RESET)
+#define HAL_IS_BIT_SET(REG, BIT)         (((REG) & (BIT)) == (BIT))
+#define HAL_IS_BIT_CLR(REG, BIT)         (((REG) & (BIT)) == 0U)
 
 #define __HAL_LINKDMA(__HANDLE__, __PPP_DMA_FIELD__, __DMA_HANDLE__)               \
                         do{                                                      \
                               (__HANDLE__)->__PPP_DMA_FIELD__ = &(__DMA_HANDLE__); \
                               (__DMA_HANDLE__).Parent = (__HANDLE__);             \
-                          } while(0)
-
-#define UNUSED(x) ((void)(x))
+                          } while(0U)
 
 /** @brief Reset the Handle's State field.
   * @param  __HANDLE__ specifies the Peripheral Handle.
@@ -127,126 +107,67 @@ typedef enum
                                     }while (0U)
 #endif /* USE_RTOS */
 
-
-/** 
-  *  __weak / __packed definition
-  */ 
-/*
- * ARM Compiler 4/5
- */
-#if   defined ( __CC_ARM )
-  /* already defined by compiler */
-
-/*
- * ARM Compiler 6 (armclang)
- */
-#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+#if defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050) /* ARM Compiler V6 */
+  #ifndef __weak
+    #define __weak  __attribute__((weak))
+  #endif
+  #ifndef __packed
+    #define __packed  __attribute__((packed))
+  #endif
+#elif defined ( __GNUC__ ) && !defined (__CC_ARM) /* GNU Compiler */
   #ifndef __weak
     #define __weak   __attribute__((weak))
   #endif /* __weak */
   #ifndef __packed
     #define __packed __attribute__((__packed__))
   #endif /* __packed */
-
-/*
- * GNU Compiler
- */
-#elif defined ( __GNUC__ )
-  #ifndef __weak
-    #define __weak   __attribute__((weak))
-  #endif /* __weak */
-  #ifndef __packed
-    #define __packed __attribute__((__packed__))
-  #endif /* __packed */
-
-/*
- * IAR Compiler
- */
-#elif defined ( __ICCARM__ )
-  /* already defined by compiler */
-
-#endif
+#endif /* __GNUC__ */
 
 
-/** 
-  *  macro to get variable aligned on 4-bytes
-  */ 
-/*
- * ARM Compiler 4/5
- */
-#if   defined ( __CC_ARM )
+/* Macro to get variable aligned on 4-bytes, for __ICCARM__ the directive "#pragma data_alignment=4" must be used instead */
+#if defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050) /* ARM Compiler V6 */
+  #ifndef __ALIGN_BEGIN
+    #define __ALIGN_BEGIN
+  #endif
   #ifndef __ALIGN_END
-    #define __ALIGN_END
-  #endif /* __ALIGN_END */
-  #ifndef __ALIGN_BEGIN      
-    #define __ALIGN_BEGIN    __align(4)  
-  #endif /* __ALIGN_BEGIN */
-
-/*
- * ARM Compiler 6 (armclang)
- */
-#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+    #define __ALIGN_END      __attribute__ ((aligned (4)))
+  #endif
+#elif defined ( __GNUC__ ) && !defined (__CC_ARM) /* GNU Compiler */
   #ifndef __ALIGN_END
-    #define __ALIGN_END    __attribute__ ((aligned (4)))
+    #define __ALIGN_END    __attribute__ ((aligned (4U)))
   #endif /* __ALIGN_END */
   #ifndef __ALIGN_BEGIN  
     #define __ALIGN_BEGIN
   #endif /* __ALIGN_BEGIN */
-
-/*
- * GNU Compiler
- */
-#elif defined ( __GNUC__ )
-  #ifndef __ALIGN_END
-    #define __ALIGN_END    __attribute__ ((aligned (4)))
-  #endif /* __ALIGN_END */
-  #ifndef __ALIGN_BEGIN  
-    #define __ALIGN_BEGIN
-  #endif /* __ALIGN_BEGIN */
-
-/*
- * IAR Compiler
- */
-#elif defined ( __ICCARM__ )
-  /* the directive "#pragma data_alignment=4" must be used instead */
+#else
   #ifndef __ALIGN_END
     #define __ALIGN_END
   #endif /* __ALIGN_END */
   #ifndef __ALIGN_BEGIN      
-    #define __ALIGN_BEGIN 
+    #if defined   (__CC_ARM)      /* ARM Compiler V5*/
+      #define __ALIGN_BEGIN    __align(4U)
+    #elif defined (__ICCARM__)    /* IAR Compiler */
+      #define __ALIGN_BEGIN 
+    #endif /* __CC_ARM */
   #endif /* __ALIGN_BEGIN */
-
-#endif
+#endif /* __GNUC__ */
 
 /** 
   * @brief  __NOINLINE definition
-  */
-/*
- * ARM Compiler 4/5
- */
-#if   defined ( __CC_ARM )
-  #define __NOINLINE __attribute__ ((noinline) )
+  */ 
+#if defined ( __CC_ARM   ) || (defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)) || defined   (  __GNUC__  )
+/* ARM V4/V5 and V6 & GNU Compiler
+   -------------------------------
+*/
+#define __NOINLINE __attribute__ ( (noinline) )
 
-/*
- * ARM Compiler 6 (armclang)
- */
-#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
-  #define __NOINLINE __attribute__ ((noinline) )
-
-/*
- * GNU Compiler
- */
-#elif defined ( __GNUC__ )
-  #define __NOINLINE __attribute__ ((noinline) )
-
-/*
- * IAR Compiler
- */
 #elif defined ( __ICCARM__ )
-  #define __NOINLINE _Pragma("optimize = no_inline")
+/* ICCARM Compiler
+   ---------------
+*/
+#define __NOINLINE _Pragma("optimize = no_inline")
 
 #endif
-
 
 #ifdef __cplusplus
 }
